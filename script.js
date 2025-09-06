@@ -121,8 +121,10 @@ const showNewsByCategory = (articles) => {
            <div id=${article.id} class="">
              <h1 class="font-bold">${article.title}</h1>
             <p>${article.time}</p>
-            <button class="btn">Bookmark</button>
-            <button class="btn">View Details</button>
+             
+                <button class="border-1 border-gray-300 rounded-sm bg-red-400 text-white px-1 text-md ">Bookmark</button>
+                <button class="border-1 border-gray-300 rounded-sm bg-red-400 text-white px-2 text-md">Details</button>
+             
            </div>
         </div>
         `;
@@ -138,6 +140,12 @@ newsContainer.addEventListener("click", (e) => {
         // console.log(e.target.parentNode.id)
         // console.log(e.target.parentNode.children[1].innerText)
         handleBookmark(e);
+    }
+    if (e.target.innerText === 'Details') {
+        // console.log("bookmark clicked")
+        // console.log(e.target.parentNode.id)
+        // console.log(e.target.parentNode.children[1].innerText)
+        handleViewDetails(e);
     }
 
 })
@@ -178,6 +186,29 @@ const handleDeleteBookmark = (bookmarkId) => {
     console.log(filteredBookmark)
      bookmarks = filteredBookmark
     showBookmarks(bookmarks)
+}
+
+const handleViewDetails = (e)=>{
+    const id = e.target.parentNode.id;
+    // newsDetailsModal.showModal()
+    fetch(`https://news-api-fs.vercel.app/api/news/${id}`)
+    .then(res => res.json())
+    .then(data => {
+        showDetailsNews(data.article);
+    }).catch( err => {
+        console.log(err);
+    })
+
+}
+
+const showDetailsNews = (article)=>{
+        newsDetailsModal.showModal()
+
+        modalContainer.innerHTML = `
+            <h1>${article.title}</h1>
+            <img src="${article.images[0].url}" />
+            <p>${article.content.join(" ")} </p>
+        `;
 }
 
 const showloading = () => {
