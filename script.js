@@ -71,8 +71,8 @@ const showCategory = (categories) => {
         const allLi = document.querySelectorAll('li')
         allLi.forEach(li => li.classList.remove("border-b-4"))
         if (e.target.localName === 'li') {
-            
-            console.log(e.target)
+            showloading()
+            // console.log(e.target)
              
             e.target.classList.add("border-b-4")
             loadNewsByCategory(e.target.id)
@@ -94,15 +94,22 @@ const loadNewsByCategory = (id) => {
             //         <p> ${news.title} </p>
             //     `;
 
+        }).catch((err)=> {
+             showError()
             })
         }
 
 
 const showNewsByCategory = (articles) => {
     // console.log(articles)
-    // newsContainer.innerHTML = '';
-    const allLi = document.querySelectorAll('.news')
-        allLi.forEach(li => li.style.display = 'none')
+    if (articles.length === 0) {
+        showEmpty();
+        return;
+        
+    }
+    newsContainer.innerHTML = '';
+    // const allLi = document.querySelectorAll('.news')
+    //     allLi.forEach(li => li.style.display = 'none')
     articles.forEach(article => {
         newsContainer.innerHTML += `
         <div class='news rounded-xl border-1 border-gray-200 p-4 space-y-2'>
@@ -170,6 +177,28 @@ const handleDeleteBookmark = (bookmarkId) => {
     showBookmarks(bookmarks)
 }
 
+const showloading = () => {
+    newsContainer.innerHTML = `
+        <div class="text-center">
+                <h1>loading....</h1>
+            </div>
+    `;
+}
+const showError = () => {
+    newsContainer.innerHTML = `
+        <div class="text-center">
+                <h1>Error....</h1>
+            </div>
+    `;
+}
+
+const showEmpty = () => {
+     newsContainer.innerHTML = `
+        <div class="text-center">
+                <h1>hosw Empty....</h1>
+            </div>
+    `;
+}
 
 loadCategory();
 loadNewsByCategory('main')
