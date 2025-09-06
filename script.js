@@ -36,6 +36,8 @@
 // loadCategoryAsync()
 
 const categoryContainer = document.getElementById("category-container");
+const newsContainer = document.getElementById("news-container");
+const bookmarContainer = document.getElementById("bookmark-container")
 
 const loadCategory = () => {
   fetch("https://news-api-fs.vercel.app/api/categories")
@@ -64,15 +66,108 @@ const showCategory = (categories) => {
     
     categoryContainer.addEventListener("click", (e) => {
         // console.log(e.target)
+        
         const allLi = document.querySelectorAll('li')
         allLi.forEach(li => li.classList.remove("border-b-4"))
         if (e.target.localName === 'li') {
-            e.target.classList.remove('border-b-4')
+            
             console.log(e.target)
              
             e.target.classList.add("border-b-4")
+            loadNewsByCategory(e.target.id)
            
         }
     })
 }
+
+const loadNewsByCategory = (id) => {
+    fetch(`https://news-api-fs.vercel.app/api/categories/${id}`)
+        .then(res => res.json())
+        .then(data => {
+            showNewsByCategory(data.articles
+            )
+            // const dataArticle = data.articles;
+            // dataArticle.forEach(news => {
+            //     const inLi = document.createElement('span');
+            //     inLi.innerHTML = `
+            //         <p> ${news.title} </p>
+            //     `;
+
+            })
+        }
+
+
+const showNewsByCategory = (articles) => {
+    // console.log(articles)
+    // newsContainer.innerHTML = '';
+    const allLi = document.querySelectorAll('.news')
+        allLi.forEach(li => li.style.display = 'none')
+    articles.forEach(article => {
+        newsContainer.innerHTML += `
+        <div class='news rounded-xl border-1 border-gray-200 p-4 space-y-2'>
+            <div>
+            <img src="${article.image.srcset[5].url}" />
+            </div>
+           <div id=${article.id} class="">
+             <h1 class="font-bold">${article.title}</h1>
+            <p>${article.time}</p>
+            <button class="btn">Bookmark</button>
+           </div>
+        </div>
+        `;
+    })
+}
+let bookmarks = [];
+newsContainer.addEventListener("click", (e) => {
+    // if (e.target.localName !=='div') {
+    //      console.log(e.target)
+    // }
+    if (e.target.innerText === 'Bookmark') {
+        // console.log("bookmark clicked")
+        // console.log(e.target.parentNode.id)
+        // console.log(e.target.parentNode.children[1].innerText)
+        handleBookmark(e);
+    }
+
+})
+
+const handleBookmark = (e) => {
+    const title = e.target.parentNode.children[0].innerText;
+        const id = e.target.parentNode.id;
+        bookmarks.push({
+            title: title,
+            id: id
+        })
+    // console.log(bookmarks);
+    showBookmarks(bookmarks)
+}
+
+const showBookmarks = (bookmarks) => {
+    // console.log(bookmarks)
+    bookmarContainer.innerHTML = '';
+    bookmarks.forEach(bookmark => {
+       
+        bookmarContainer.innerHTML += `
+
+        <div class="border-1 mb-2">
+        <h1>${bookmark.title}</h1>
+        <button onclick="handleDeleteBookmark('${bookmark.id}')"  class="btn">Delete</button>
+        </div>
+
+        `;
+    })
+};
+
+const handleDeleteBookmark = (bookmarkId) => {
+    // console.log(bookmarkId)
+    // console.log(bookmarks)
+    const filteredBookmark = bookmarks.filter
+        (bookmark => bookmark.id !== bookmarkId);
+    console.log(filteredBookmark)
+     bookmarks = filteredBookmark
+    showBookmarks(bookmarks)
+}
+
+
 loadCategory();
+loadNewsByCategory('main')
