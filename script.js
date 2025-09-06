@@ -39,6 +39,8 @@ const categoryContainer = document.getElementById("category-container");
 const newsContainer = document.getElementById("news-container");
 const bookmarContainer = document.getElementById("bookmark-container");
 const bookmarkCount = document.getElementById("bookmarCount");
+const newsDetailsModal = document.getElementById("news-details-modal");
+const modalContainer = document.getElementById("modal-container");
 
 const loadCategory = () => {
   fetch("https://news-api-fs.vercel.app/api/categories")
@@ -120,6 +122,7 @@ const showNewsByCategory = (articles) => {
              <h1 class="font-bold">${article.title}</h1>
             <p>${article.time}</p>
             <button class="btn">Bookmark</button>
+            <button class="btn">View Details</button>
            </div>
         </div>
         `;
