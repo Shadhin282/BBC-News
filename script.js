@@ -37,7 +37,8 @@
 
 const categoryContainer = document.getElementById("category-container");
 const newsContainer = document.getElementById("news-container");
-const bookmarContainer = document.getElementById("bookmark-container")
+const bookmarContainer = document.getElementById("bookmark-container");
+const bookmarkCount = document.getElementById("bookmarCount");
 
 const loadCategory = () => {
   fetch("https://news-api-fs.vercel.app/api/categories")
@@ -156,6 +157,7 @@ const showBookmarks = (bookmarks) => {
 
         `;
     })
+    bookmarkCount.innerText = bookmarks.length;
 };
 
 const handleDeleteBookmark = (bookmarkId) => {
